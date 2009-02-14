@@ -1,7 +1,8 @@
 (ns guestbook.servlet.GuestbookServlet
   (:require
     [compojure.http :as http]
-    [compojure.html :as html])
+    [compojure.html :as html]
+    [guestbook.greeting :as greeting])
   (:import
     (com.google.appengine.api.users User UserService UserServiceFactory)
     (java.util.logging Logger))
@@ -16,7 +17,8 @@
     [user-service (.getCurrentUser user-service)]))
 
 (defn show-guestbook []
-  (let [[user-service user] (user-info)]
+  (let [[user-service user] (user-info)
+        greetings (greeting/find-all)]
     (html/html
       [:html
         [:head [:title "Guestbook"]]
@@ -28,15 +30,24 @@
             [:p "Hello! (You can "
               [:a {:href (.createLoginURL user-service "/")} "sign in"]
               " to include your name with your greeting when you post.)"])
+          (if (empty? greetings)
+            [:p "The guestbook has no messages."]
+            (map
+              (fn [g] [:div
+                        [:p
+                          (if (g :author)
+                            [:strong (g :author)]
+                            "An anonymous guest")
+                          " wrote:"]
+                        [:blockquote (g :content)]])
+              greetings))
           [:form {:action "/sign" :method "POST"}
             [:div [:textarea {:name "content" :rows "3" :cols "60"}]]
             [:div [:input {:type "submit" :value "Post Greeting"}]]]]])))
 
 (defn sign-guestbook [params]
-  (let [[user-service user] (user-info)]
-    (if user
-      (.info logger (str "Greeting posted by " (.getNickname user) ": " (params :content)))
-      (.info logger (str "Greeting posted anonymously: " (params :content))))
+  (let [[_ user] (user-info)]
+    (greeting/create (params :content) (if user (.getNickname user)))
     (http/redirect-to "/")))
 
 (http/defservice "-"

@@ -1,1 +1,3 @@
 war/WEB-INF/classes/*
+war/WEB-INF/generated/*
+local_db.bin
