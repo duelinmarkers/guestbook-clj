@@ -1,9 +1,9 @@
 (ns guestbook.servlet.GuestbookServlet
-  (:use (compojure http html))
+  (:require [compojure.http :as http])
   (:gen-class
     :extends javax.servlet.http.HttpServlet))
 
 
-(defservice "-"
-  (ANY "/*"
+(http/defservice "-"
+  (http/GET "/*"
     "Hello, world"))
