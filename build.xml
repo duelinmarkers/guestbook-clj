@@ -20,7 +20,7 @@
   </target>
   
   <target name="compile" depends="copyjars">
-    <java classname="clojure.lang.Compile" classpathref="project.classpath">
+    <java classname="clojure.lang.Compile" classpathref="project.classpath" failonerror="true">
       <classpath path="${src.dir}" />
       <sysproperty key="clojure.compile.path" value="${classes.dir}" />
       <arg value="guestbook.servlet.GuestbookServlet" />
