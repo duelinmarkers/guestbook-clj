@@ -15,11 +15,19 @@
     </fileset>
   </path>
   
+  <target name="clean">
+    <delete dir="${classes.dir}" />
+  </target>
+  
+  <target name="init">
+    <mkdir dir="${classes.dir}" />
+  </target>
+  
   <target name="copyjars">
     <copy file="${sdk.dir}/lib/user/appengine-api.jar" todir="${lib.dir}" />
   </target>
   
-  <target name="compile" depends="copyjars">
+  <target name="compile" depends="init,copyjars">
     <java classname="clojure.lang.Compile" classpathref="project.classpath" failonerror="true">
       <classpath path="${src.dir}" />
       <sysproperty key="clojure.compile.path" value="${classes.dir}" />
