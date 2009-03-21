@@ -27,7 +27,7 @@
     <copy file="${sdk.dir}/lib/user/appengine-api.jar" todir="${lib.dir}" />
   </target>
   
-  <target name="compile" depends="init,copyjars">
+  <target name="compile" depends="clean,init,copyjars">
     <java classname="clojure.lang.Compile" classpathref="project.classpath" failonerror="true">
       <classpath path="${src.dir}" />
       <sysproperty key="clojure.compile.path" value="${classes.dir}" />
