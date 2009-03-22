@@ -25,6 +25,10 @@
   
   <target name="copyjars">
     <copy file="${sdk.dir}/lib/user/appengine-api.jar" todir="${lib.dir}" />
+    <copy file="/Users/hume/dev/compojure/compojure.jar" todir="${lib.dir}" />
+    <copy todir="${lib.dir}">
+	    <fileset dir="/Users/hume/dev/compojure/deps" />
+    </copy>   
   </target>
   
   <target name="compile" depends="clean,init,copyjars">

@@ -1,8 +1,9 @@
 (ns guestbook.servlet.GuestbookServlet
   (:require
-    [compojure.http :as http]
-    [compojure.html :as html]
-    [guestbook.greeting :as greeting])
+    [compojure.http         :as http]
+    [compojure.http.routes  :as routes]
+    [compojure.html         :as html]
+    [guestbook.greeting     :as greeting])
   (:import
     (com.google.appengine.api.users User UserService UserServiceFactory)
     (java.util.logging Logger))
@@ -21,7 +22,9 @@
         greetings (greeting/find-all)]
     (html/html
       [:html
-        [:head [:title "Guestbook"]]
+        [:head
+          [:title "Guestbook"]
+          [:link {:type "text/css" :rel "stylesheet" :href "/stylesheets/main.css"}]]
         [:body
           (if user
             [:p (str "Hello, " (.getNickname user) "! (You can ")
@@ -50,10 +53,12 @@
     (greeting/create (params :content) (if user (.getNickname user)))
     (http/redirect-to "/")))
 
-(http/defservice "-"
+(routes/defroutes guestbook-app
   (http/POST "/sign"
     (sign-guestbook params))
   (http/GET "/"
     (show-guestbook))
   (http/ANY "*"
     [404 "Not found!"]))
+
+(http/defservice guestbook-app)
