@@ -1,5 +1,14 @@
 body {
   font-family: Helvetica, Verdana, sans-serif;
   background-color: #DDDDDD;
+  margin: 3ex 30% 3ex 20%;
 }
 
+textarea {
+  width: 100%;
+  margin: 1ex;
+}
+
+input {
+  float: right;
+}
