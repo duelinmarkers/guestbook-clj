@@ -2,10 +2,11 @@
   (:require
     [compojure.http         :as http]
     [compojure.http.routes  :as routes]
-    [compojure.html         :as html]
+    [compojure.html.gen     :as html]
     [compojure.html.form-helpers :as form]
     [compojure.html.page-helpers :as page]
-    [guestbook.greeting     :as greeting])
+    [guestbook.greeting     :as greeting]
+    [guestbook.clj-exercise :as clj-exercise])
   (:import
     (com.google.appengine.api.users User UserService UserServiceFactory))
   (:gen-class
@@ -45,18 +46,39 @@
               greetings))
           (form/form-to [POST "/sign"]
             [:div (form/text-area "content" "")]
-            [:div (form/submit-button "Post Greeting")])]])))
+            [:div (form/submit-button "Post Greeting")])
+          (page/link-to "/exercise" "exercise clojure a bit")]])))
 
 (defn sign-guestbook [params]
   (let [[_ user] (user-info)]
     (greeting/create (params :content) (if user (.getNickname user)))
     (http/redirect-to "/")))
 
+(defn exercise []
+  (let [[_ user] (user-info)
+        [atom-value ref-value] (clj-exercise/show-off (if user (.getNickname user) "anon"))]
+    (html/html [:html
+      [:head
+        [:title "Clojure on AppEngine: Atoms and Refs"]
+        (page/include-css "/stylesheets/main.css")]
+      [:body
+        [:h1 "Atoms and Refs"]
+        [:p "Each request to this page increments an atom, which starts at zero, 
+            and updates a ref by adding to a vector of visitors and a leaving a timestamp.
+            This is just here to illustrate that atoms and refs work.
+            But you may see with repeated requests that they work a little strangely
+            due to the distributed nature of AppEngine."]
+        [:p "The current atom value is " (html/h atom-value) "."]
+        [:p "The current ref value is " (html/h ref-value) "."]
+        (page/link-to "/" "back to guestbook")]])))
+
 (routes/defroutes guestbook-app
   (http/POST "/sign"
     (sign-guestbook params))
   (http/GET "/"
     (show-guestbook))
+  (http/GET "/exercise"
+    (exercise))
   (http/ANY "*"
     [404 "Not found!"]))
 
