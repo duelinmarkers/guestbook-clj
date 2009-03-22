@@ -3,6 +3,8 @@
     [compojure.http         :as http]
     [compojure.http.routes  :as routes]
     [compojure.html         :as html]
+    [compojure.html.form-helpers :as form]
+    [compojure.html.page-helpers :as page]
     [guestbook.greeting     :as greeting])
   (:import
     (com.google.appengine.api.users User UserService UserServiceFactory)
@@ -24,14 +26,14 @@
       [:html
         [:head
           [:title "Guestbook"]
-          [:link {:type "text/css" :rel "stylesheet" :href "/stylesheets/main.css"}]]
+          (page/include-css "/stylesheets/main.css")]
         [:body
           (if user
             [:p (str "Hello, " (.getNickname user) "! (You can ")
-              [:a {:href (.createLogoutURL user-service "/")} "sign out"]
+              (page/link-to (.createLogoutURL user-service "/") "sign out")
               ".)"]
             [:p "Hello! (You can "
-              [:a {:href (.createLoginURL user-service "/")} "sign in"]
+              (page/link-to (.createLoginURL user-service "/") "sign in")
               " to include your name with your greeting when you post.)"])
           (if (empty? greetings)
             [:p "The guestbook has no messages."]
@@ -44,9 +46,12 @@
                           " wrote:"]
                         [:blockquote (g :content)]])
               greetings))
-          [:form {:action "/sign" :method "POST"}
-            [:div [:textarea {:name "content" :rows "3" :cols "60"}]]
-            [:div [:input {:type "submit" :value "Post Greeting"}]]]]])))
+          (form/form-to [POST "/sign"]
+            [:div
+              (form/text-area {:rows "3" :cols "60"}
+                "content" "")]
+            [:div
+              (form/submit-button "Post Greeting")])]])))
 
 (defn sign-guestbook [params]
   (let [[_ user] (user-info)]
