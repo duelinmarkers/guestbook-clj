@@ -15,7 +15,8 @@
 
 (defn find-all []
   (let [data-service (DatastoreServiceFactory/getDatastoreService)
-        results (.asIterable (.prepare data-service (Query. "Greeting")))]
+        results (.asIterable (.prepare data-service (doto (Query. "Greeting")
+                                                      (.addSort "date"))))]
     (map (fn [entity]
       {:author (.getProperty entity "author") :content (.getProperty entity "content") :date (.getProperty entity "date")})
       results)))
