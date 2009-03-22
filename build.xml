@@ -27,7 +27,7 @@
     <copy file="${sdk.dir}/lib/user/appengine-api.jar" todir="${lib.dir}" />
     <copy file="/Users/hume/dev/compojure/compojure.jar" todir="${lib.dir}" />
     <copy todir="${lib.dir}">
-	    <fileset dir="/Users/hume/dev/compojure/deps" />
+      <filelist dir="/Users/hume/dev/compojure/deps" files="clojure.jar clojure-contrib.jar" />
     </copy>   
   </target>
   

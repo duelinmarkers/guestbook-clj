@@ -1,8 +1,6 @@
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
   <application>guestbook-clj</application>
   <version>1</version>
-  <static-files>
-    <include path="/stylesheets/main.css" />
-  </static-files>
+  <static-files />
   <resource-files />
 </appengine-web-app>
