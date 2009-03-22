@@ -16,7 +16,8 @@
     [user-service (.getCurrentUser user-service)]))
 
 (defn show-guestbook []
-  (let [[user-service user] (user-info)]
+  (let [[user-service user] (user-info)
+        all-greetings (greetings/find-all)]
     (html [:html
       [:head
         [:title "Guestbook"]
@@ -29,13 +30,13 @@
           [:p "Hello! (You can "
             (link-to (.createLoginURL user-service "/") "sign in")
             " to include your name with your greeting when you post.)"])
-        (if (empty? greetings)
+        (if (empty? all-greetings)
           [:p "The guestbook has no messages."]
           (map (fn [greeting]
             [:div
               [:p (if (greeting :author) [:strong (greeting :author)] "An anonymous guest") " wrote:"]
-              [:blockquote (h (g :content))]])
-            (greetings/find-all)))
+              [:blockquote (h (greeting :content))]])
+            all-greetings))
         (form-to [POST "/sign"]
           [:div (text-area "content" "")]
           [:div (submit-button "Post Greeting")])
@@ -43,7 +44,7 @@
 
 (defn sign-guestbook [params]
   (let [[_ user] (user-info)]
-    (greeting/create (params :content) (if user (.getNickname user)))
+    (greetings/create (params :content) (if user (.getNickname user)))
     (redirect-to "/")))
 
 (defn exercise []
