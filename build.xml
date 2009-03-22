@@ -43,8 +43,9 @@
     <java
         fork="true"
         classpath="${sdk.dir}/lib/appengine-tools-api.jar"
-        classname="com.google.appengine.tools.development.DevAppServerMain">
-      <arg value="${basedir}/war" />
+	classname="com.google.appengine.tools.development.DevAppServerMain"
+	dir="${basedir}/war">
+      <arg value="." />
     </java>
   </target>
   
