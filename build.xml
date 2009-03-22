@@ -35,7 +35,7 @@
     <java classname="clojure.lang.Compile" classpathref="project.classpath" failonerror="true">
       <classpath path="${src.dir}" />
       <sysproperty key="clojure.compile.path" value="${classes.dir}" />
-      <arg value="guestbook.servlet.GuestbookServlet" />
+      <arg value="guestbook.servlet" />
     </java>
   </target>
   

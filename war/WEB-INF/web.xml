@@ -8,7 +8,7 @@
   
   <servlet>
     <servlet-name>gb</servlet-name>
-    <servlet-class>guestbook.servlet.GuestbookServlet</servlet-class>
+    <servlet-class>guestbook.servlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>gb</servlet-name>

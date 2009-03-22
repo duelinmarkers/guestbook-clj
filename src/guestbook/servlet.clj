@@ -1,4 +1,4 @@
-(ns guestbook.servlet.GuestbookServlet
+(ns guestbook.servlet
   (:require
     [compojure.http         :as http]
     [compojure.http.routes  :as routes]
@@ -12,8 +12,6 @@
   (:gen-class
     :extends javax.servlet.http.HttpServlet))
 
-
-(def logger (Logger/getLogger "guestbook.servlet.GuestbookServlet"))
 
 (defn user-info []
   (let [user-service (UserServiceFactory/getUserService)]
