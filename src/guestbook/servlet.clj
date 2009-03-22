@@ -1,4 +1,6 @@
 (ns guestbook.servlet
+  (:gen-class
+    :extends javax.servlet.http.HttpServlet)
   (:use
     compojure.http
     compojure.html)
@@ -6,9 +8,7 @@
     [guestbook.greeting     :as greeting]
     [guestbook.clj-exercise :as clj-exercise])
   (:import
-    (com.google.appengine.api.users User UserService UserServiceFactory))
-  (:gen-class
-    :extends javax.servlet.http.HttpServlet))
+    (com.google.appengine.api.users User UserService UserServiceFactory)))
 
 
 (defn user-info []
