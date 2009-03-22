@@ -5,7 +5,6 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     version="2.5">
   <display-name>Clojure Guestbook</display-name>
-  
   <servlet>
     <servlet-name>gb</servlet-name>
     <servlet-class>guestbook.servlet</servlet-class>
@@ -14,5 +13,4 @@
     <servlet-name>gb</servlet-name>
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
-  
 </web-app>
