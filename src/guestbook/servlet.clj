@@ -7,8 +7,7 @@
     [compojure.html.page-helpers :as page]
     [guestbook.greeting     :as greeting])
   (:import
-    (com.google.appengine.api.users User UserService UserServiceFactory)
-    (java.util.logging Logger))
+    (com.google.appengine.api.users User UserService UserServiceFactory))
   (:gen-class
     :extends javax.servlet.http.HttpServlet))
 
@@ -27,7 +26,7 @@
           (page/include-css "/stylesheets/main.css")]
         [:body
           (if user
-            [:p (str "Hello, " (.getNickname user) "! (You can ")
+            [:p "Hello, " (.getNickname user) "! (You can "
               (page/link-to (.createLogoutURL user-service "/") "sign out")
               ".)"]
             [:p "Hello! (You can "
@@ -45,11 +44,8 @@
                         [:blockquote (g :content)]])
               greetings))
           (form/form-to [POST "/sign"]
-            [:div
-              (form/text-area {:rows "3" :cols "60"}
-                "content" "")]
-            [:div
-              (form/submit-button "Post Greeting")])]])))
+            [:div (form/text-area "content" "")]
+            [:div (form/submit-button "Post Greeting")])]])))
 
 (defn sign-guestbook [params]
   (let [[_ user] (user-info)]
