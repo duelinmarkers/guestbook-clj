@@ -1,4 +1,4 @@
-(ns guestbook.greeting
+(ns guestbook.greetings
   (:import (com.google.appengine.api.datastore
               DatastoreServiceFactory
               Entity

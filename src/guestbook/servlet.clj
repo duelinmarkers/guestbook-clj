@@ -5,7 +5,7 @@
     compojure.http
     compojure.html)
   (:require
-    [guestbook.greeting     :as greeting]
+    [guestbook.greetings    :as greetings]
     [guestbook.clj-exercise :as clj-exercise])
   (:import
     (com.google.appengine.api.users User UserService UserServiceFactory)))
@@ -16,36 +16,30 @@
     [user-service (.getCurrentUser user-service)]))
 
 (defn show-guestbook []
-  (let [[user-service user] (user-info)
-        greetings (greeting/find-all)]
-    (html
-      [:html
-        [:head
-          [:title "Guestbook"]
-          (include-css "/stylesheets/main.css")]
-        [:body
-          (if user
-            [:p "Hello, " (.getNickname user) "! (You can "
-              (link-to (.createLogoutURL user-service "/") "sign out")
-              ".)"]
-            [:p "Hello! (You can "
-              (link-to (.createLoginURL user-service "/") "sign in")
-              " to include your name with your greeting when you post.)"])
-          (if (empty? greetings)
-            [:p "The guestbook has no messages."]
-            (map
-              (fn [g] [:div
-                        [:p
-                          (if (g :author)
-                            [:strong (g :author)]
-                            "An anonymous guest")
-                          " wrote:"]
-                        [:blockquote (h (g :content))]])
-              greetings))
-          (form-to [POST "/sign"]
-            [:div (text-area "content" "")]
-            [:div (submit-button "Post Greeting")])
-          (link-to "/exercise" "exercise clojure a bit")]])))
+  (let [[user-service user] (user-info)]
+    (html [:html
+      [:head
+        [:title "Guestbook"]
+        (include-css "/stylesheets/main.css")]
+      [:body
+        (if user
+          [:p "Hello, " (.getNickname user) "! (You can "
+            (link-to (.createLogoutURL user-service "/") "sign out")
+            ".)"]
+          [:p "Hello! (You can "
+            (link-to (.createLoginURL user-service "/") "sign in")
+            " to include your name with your greeting when you post.)"])
+        (if (empty? greetings)
+          [:p "The guestbook has no messages."]
+          (map (fn [greeting]
+            [:div
+              [:p (if (greeting :author) [:strong (greeting :author)] "An anonymous guest") " wrote:"]
+              [:blockquote (h (g :content))]])
+            (greetings/find-all)))
+        (form-to [POST "/sign"]
+          [:div (text-area "content" "")]
+          [:div (submit-button "Post Greeting")])
+        (link-to "/exercise" "exercise clojure a bit")]])))
 
 (defn sign-guestbook [params]
   (let [[_ user] (user-info)]
@@ -65,7 +59,8 @@
             and updates a ref by adding to a vector of visitors and leaving a timestamp.
             This is just here to illustrate that atoms and refs work.
             But you may see with repeated requests that they work a little strangely
-            due to the distributed nature of AppEngine."]
+            due to the distributed nature of AppEngine.
+            (Or you may not. It's unpredictable.)"]
         [:p "The current atom value is " (h atom-value) "."]
         [:p "The current ref value is " (h ref-value) "."]
         (link-to "/" "back to guestbook")]])))
