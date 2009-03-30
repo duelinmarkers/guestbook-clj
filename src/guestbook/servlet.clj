@@ -6,17 +6,12 @@
     compojure.html)
   (:require
     [guestbook.greetings    :as greetings]
-    [guestbook.clj-exercise :as clj-exercise])
-  (:import
-    (com.google.appengine.api.users User UserService UserServiceFactory)))
+    [guestbook.clj-exercise :as clj-exercise]
+    [appengine-clj.users    :as users]))
 
 
-(defn user-info []
-  (let [user-service (UserServiceFactory/getUserService)]
-    [user-service (.getCurrentUser user-service)]))
-
-(defn show-guestbook []
-  (let [[user-service user] (user-info)
+(defn show-guestbook [user-info]
+  (let [{:keys [user user-service]} user-info
         all-greetings (greetings/find-all)]
     (html [:html
       [:head
@@ -42,14 +37,12 @@
           [:div (submit-button "Post Greeting")])
         (link-to "/exercise" "exercise clojure a bit")]])))
 
-(defn sign-guestbook [params]
-  (let [[_ user] (user-info)]
-    (greetings/create (params :content) (if user (.getNickname user)))
-    (redirect-to "/")))
+(defn sign-guestbook [params user]
+  (greetings/create (params :content) (if user (.getNickname user)))
+  (redirect-to "/"))
 
-(defn exercise []
-  (let [[_ user] (user-info)
-        [atom-value ref-value] (clj-exercise/show-off (if user (.getNickname user) "anon"))]
+(defn exercise [user]
+  (let [[atom-value ref-value] (clj-exercise/show-off (if user (.getNickname user) "anon"))]
     (html [:html
       [:head
         [:title "Clojure on AppEngine: Atoms and Refs"]
@@ -68,12 +61,13 @@
 
 (defroutes guestbook-app
   (POST "/sign"
-    (sign-guestbook params))
+    (sign-guestbook params ((request :appengine-clj/user-info) :user)))
   (GET "/"
-    (show-guestbook))
+    (show-guestbook (request :appengine-clj/user-info)))
   (GET "/exercise"
-    (exercise))
+    (exercise ((request :appengine-clj/user-info) :user)))
   (ANY "*"
     [404 "Not found!"]))
 
-(defservice guestbook-app)
+(defservice (users/wrap-with-user-info guestbook-app))
+
