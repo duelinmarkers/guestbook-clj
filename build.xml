@@ -4,6 +4,8 @@
   <property name="classes.dir" value="war/WEB-INF/classes" />
   <property name="lib.dir" value="war/WEB-INF/lib" />
   <property name="src.dir" value="src" />
+  <property name="test.dir" value="test" />
+  <property name="compojure.dir" value="/Users/hume/dev/compojure" />
   
   <path id="project.classpath">
     <pathelement path="${classes.dir}" />
@@ -25,9 +27,10 @@
   
   <target name="copyjars">
     <copy file="${sdk.dir}/lib/user/appengine-api.jar" todir="${lib.dir}" />
-    <copy file="/Users/hume/dev/compojure/compojure.jar" todir="${lib.dir}" />
+    <copy file="${compojure.dir}/compojure.jar" todir="${lib.dir}" />
+    <copy file="/Users/hume/dev/tw/g/appengine-clj/appengine-clj.jar" todir="${lib.dir}" />
     <copy todir="${lib.dir}">
-      <filelist dir="/Users/hume/dev/compojure/deps" files="clojure.jar clojure-contrib.jar" />
+      <filelist dir="${compojure.dir}/deps" files="clojure.jar clojure-contrib.jar" />
     </copy>   
   </target>
   
@@ -39,12 +42,22 @@
     </java>
   </target>
   
+  <target name="test" depends="compile">
+    <java classname="clojure.main" classpathref="project.classpath" fork="true" failonerror="true" dir="${test.dir}">
+      <classpath path="${test.dir}" />
+      <arg value="-e" />
+      <arg value="(use 'clojure.contrib.test-is)
+                  (require 'guestbook.greetings-test)
+                  (run-tests 'guestbook.greetings-test)" />
+    </java>
+  </target>
+  
   <target name="runserver" depends="compile">
     <java
         fork="true"
-        classpath="${sdk.dir}/lib/appengine-tools-api.jar"
-	classname="com.google.appengine.tools.development.DevAppServerMain"
-	dir="${basedir}/war">
+        classpath="${sdk.dir}/lib/appengine-tools-api.jar" 
+        classname="com.google.appengine.tools.development.DevAppServerMain"
+        dir="${basedir}/war">
       <arg value="." />
     </java>
   </target>
