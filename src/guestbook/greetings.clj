@@ -1,9 +1,6 @@
 (ns guestbook.greetings
   (:require [appengine-clj.datastore :as ds])
-  (:import (com.google.appengine.api.datastore
-              DatastoreServiceFactory
-              Entity
-              Query)))
+  (:import (com.google.appengine.api.datastore Query)))
 
 
 (defn create [content author]
