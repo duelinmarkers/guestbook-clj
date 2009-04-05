@@ -17,3 +17,7 @@
     (is (= 1 (count all-greetings)))
     (is (= "johnhume" (:author my-greeting)))
     (is (= "Hello from this test." (:content my-greeting)))))
+
+(dstest create-adds-date
+  (let [created-item (greetings/create "Yup." "johnhume")]
+    (is (not (nil? (created-item :date))))))
