@@ -21,3 +21,10 @@
 (dstest create-adds-date
   (let [created-item (greetings/create "Yup." "johnhume")]
     (is (not (nil? (created-item :date))))))
+
+(dstest find-all-sorts-by-date-from-oldest-to-newest
+  (let [recent-item (greetings/create "Hiyo." "hume")
+        more-recent-item (greetings/create "Yup." "hume")
+        old-item (ds/create {:kind "Greeting" :content "It's 1970!" :author "hume" :date (java.util.Date. (long 0))})]
+    (is (= ["It's 1970!" "Hiyo." "Yup."]
+           (map :content (greetings/find-all))))))
