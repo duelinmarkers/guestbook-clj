@@ -10,9 +10,8 @@
     [appengine-clj.users    :as users]))
 
 
-(defn show-guestbook [user-info]
-  (let [{:keys [user user-service]} user-info
-        all-greetings (greetings/find-all)]
+(defn show-guestbook [{:keys [user user-service]}]
+  (let [all-greetings (greetings/find-all)]
     (html [:html
       [:head
         [:title "Guestbook"]
