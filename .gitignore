@@ -1,4 +1,4 @@
 war/WEB-INF/classes/*
-war/WEB-INF/generated/*
+war/WEB-INF/lib/*
 local_db.bin
 *.swp
