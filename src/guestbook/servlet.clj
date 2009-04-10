@@ -60,11 +60,11 @@
 
 (defroutes guestbook-app
   (POST "/sign"
-    (sign-guestbook params ((request :appengine-clj/user-info) :user)))
+    (sign-guestbook params ((users/user-info request) :user)))
   (GET "/"
-    (show-guestbook (request :appengine-clj/user-info)))
+    (show-guestbook (users/user-info request)))
   (GET "/exercise"
-    (exercise ((request :appengine-clj/user-info) :user)))
+    (exercise ((users/user-info request) :user)))
   (ANY "*"
     [404 "Not found!"]))
 
