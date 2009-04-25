@@ -17,6 +17,7 @@
         [:title "Guestbook"]
         (include-css "/stylesheets/main.css")]
       [:body
+        [:h1 "AppEngine Clojure Guestbook"]
         (if user
           [:p "Hello, " (.getNickname user) "! (You can "
             (link-to (.createLogoutURL user-service "/") "sign out")
