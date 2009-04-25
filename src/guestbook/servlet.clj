@@ -32,7 +32,7 @@
               [:p (if (greeting :author) [:strong (greeting :author)] "An anonymous guest") " wrote:"]
               [:blockquote (h (greeting :content))]])
             all-greetings))
-        (form-to [POST "/sign"]
+        (form-to [:post "/sign"]
           [:div (text-area "content" "")]
           [:div (submit-button "Post Greeting")])
         (link-to "/exercise" "exercise clojure a bit")]])))

@@ -30,7 +30,7 @@
     <copy file="${compojure.dir}/compojure.jar" todir="${lib.dir}" />
     <copy file="/Users/hume/dev/tw/g/appengine-clj/appengine-clj.jar" todir="${lib.dir}" />
     <copy todir="${lib.dir}">
-      <filelist dir="${compojure.dir}/deps" files="clojure.jar clojure-contrib.jar" />
+      <filelist dir="${compojure.dir}/deps" files="clojure.jar clojure-contrib.jar commons-io-1.4.jar commons-codec-1.3.jar" />
     </copy>   
   </target>
   
