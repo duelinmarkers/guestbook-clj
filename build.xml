@@ -1,4 +1,4 @@
-<project name="guestbook-clj" basedir="." default="compile">
+<project name="guestbook-clj" basedir="." default="test">
 
   <property environment="env" />	
   <property name="sdk.dir" location="../appengine-java-sdk-1.2.0" />
@@ -45,7 +45,7 @@
     </java>
   </target>
   
-  <target name="test" depends="compile">
+  <target name="test" description="compile and test" depends="compile">
     <java classname="clojure.main" classpathref="project.classpath" fork="true" failonerror="true" dir="${test.dir}">
       <classpath path="${test.dir}" />
       <arg value="-e" />
@@ -67,11 +67,11 @@
     </java>
   </target>
   
-  <target name="devserver" depends="compile,test">
+  <target name="devserver" description="run local dev appserver"  depends="compile,test">
     <dev_appserver war="war" />
   </target>
   
-  <target name="deploy" depends="compile,test">
+  <target name="deploy" description="deploy to appspot"  depends="compile,test">
     <appcfg action="update" war="war" />
   </target>
   
